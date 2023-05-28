@@ -1,19 +1,28 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList, ScrollView } from "react-native";
 import { ListItem } from "@rneui/base";
 //hooks
 import { useState } from "react";
+import axios from "axios";
 
-const ListOfInstructors = ({ instructorsList }) => {
+const ListOfInstructors = () => {
     const [instructors, setInstructors] = useState([]);
 
-    const settingInstructors = () => {
-        setInstructors(instructorsList);
+    const getInstructors = () => {
+        axios.get("/getInstructors")
+            .then((response) => {
+                setInstructors(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+
     }
 
-    useEffect(() => { settingInstructors() }, []);
+    useEffect(() => { getInstructors() }, []);
 
     return (
+        <ScrollView>
         <View style={styles.container}>
             <Text> List of Instructors</Text>
 
@@ -26,6 +35,7 @@ const ListOfInstructors = ({ instructorsList }) => {
             ))}
 
         </View>
+        </ScrollView>
     )
 }
 
@@ -33,9 +43,8 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        backgroundColor: '#A52A2A',
     },
-    itemExpand:{
+    itemExpand: {
         alignSelf: 'stretch',
     }
 })

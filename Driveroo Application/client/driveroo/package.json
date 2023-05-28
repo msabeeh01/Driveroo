@@ -9,13 +9,21 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.7",
+    "@react-navigation/native": "^6.1.6",
+    "@react-navigation/native-stack": "^6.9.12",
     "@rneui/base": "^4.0.0-rc.7",
     "@rneui/themed": "^4.0.0-rc.7",
+    "axios": "^1.4.0",
     "expo": "~48.0.15",
+    "expo-network": "^5.2.1",
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
+    "react-dom": "^18.2.0",
     "react-native": "0.71.8",
-    "react-native-safe-area-context": "^4.5.3"
+    "react-native-safe-area-context": "4.5.0",
+    "react-native-screens": "~3.20.0",
+    "react-native-web": "~0.18.11"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
