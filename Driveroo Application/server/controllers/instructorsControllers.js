@@ -1,18 +1,33 @@
-const express = require('express');
+const TestInstructor = require('../models/TestInstructorModel')
 
-const instructors = []
 
-for (let i = 1; i <= 16; i++) {
-    instructors.push({
-      id: i,
-      name: `Instructor ${i}`,
-    });
-  }
-
-const sendInstructors = (req,res) =>{
-    res.send(instructors)
+const findAllInstructors = async (req,res) => {
+    try {
+        const instructors = await TestInstructor.find();
+        res.status(200).json(instructors);
+    } catch (error) {
+        res.status(400).json({message: error.message});
+    }
 }
 
+const createInstructor = async (req,res) => {
+    const {name} = req.body;
+    try {
+        const newInstructor = new TestInstructor({name});
+        await newInstructor.save();
+        res.status(201).json(newInstructor);
+    }
+    catch (error) {
+        if (error.code === 11000 && error.keyPattern.name === 1) {
+            res.status(404).json({ message: 'Name must be unique' });
+          } else {
+            res.status(400).json({ message: error.message });
+          }
+    }
+}
+
+
 module.exports = {
-    sendInstructors
+    findAllInstructors,
+    createInstructor
 }

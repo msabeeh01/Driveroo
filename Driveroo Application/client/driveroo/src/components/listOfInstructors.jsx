@@ -21,14 +21,15 @@ const ListOfInstructors = () => {
 
     useEffect(() => { getInstructors() }, []);
 
+    useEffect(() => { console.log(instructors) }, [instructors]);
+
     return (
         <ScrollView>
         <View style={styles.container}>
             <Text> List of Instructors</Text>
 
             {instructors?.map((instructor) => (
-                <ListItem key={instructor.id} style={styles.itemExpand}>
-                    <ListItem.Title>{instructor.id}</ListItem.Title>
+                <ListItem key={instructor._id} style={styles.itemExpand}>
                     <ListItem.Subtitle>{instructor.name}</ListItem.Subtitle>
 
                 </ListItem>
