@@ -1,18 +1,17 @@
-const express = require('express');
+const Instructor = require('../models/Instructor');
 
-const instructors = []
+exports.getInstructorById = async (req, res) => {
+  const { id } = req.params;
 
-for (let i = 1; i <= 16; i++) {
-    instructors.push({
-      id: i,
-      name: `Instructor ${i}`,
-    });
+  try {
+    const instructor = await Instructor.findById(id);
+
+    if (!instructor) {
+      return res.status(404).send({ message: 'Instructor not found' });
+    }
+
+    res.send({ name: instructor.name, email: instructor.email });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
   }
-
-const sendInstructors = (req,res) =>{
-    res.send(instructors)
-}
-
-module.exports = {
-    sendInstructors
-}
+};
