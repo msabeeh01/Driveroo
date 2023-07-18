@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 //db setup
-const mongoose = require('./db/db');
+// const mongoose = require('./db/db');
 
 const instructorsRouter = require('./routes/instructorRoutes');
 
