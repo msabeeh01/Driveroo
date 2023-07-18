@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-const instructorsControllers = require('../controllers/instructorsControllers');
+const { findAllInstructors, createInstructor } = require('../controllers/instructorsControllers')
 
 /* GET home page. */
-router.get('/getInstructors', instructorsControllers.sendInstructors);
+router.get('/getInstructors', findAllInstructors);
+router.post('/createInstructor', createInstructor);
 
 module.exports = router;
