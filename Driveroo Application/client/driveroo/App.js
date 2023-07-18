@@ -22,7 +22,7 @@ import { NavigationContainer } from '@react-navigation/native';
 /*
   CHANGE THIS TO YOUR IP ADDRESSS
 */
-const yourIP = '10.0.0.173'
+const yourIP = '10.0.0.197'
 axios.defaults.baseURL = `http://${yourIP}:3000`;
 
 
@@ -30,7 +30,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
-        <MyStack/>
+        <MyStack />
       </NavigationContainer>
     </SafeAreaView>
   );
