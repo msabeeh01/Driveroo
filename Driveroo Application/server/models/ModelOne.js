@@ -1,4 +1,4 @@
-const mongoose = require('../db/db');
+const mongoose = require('mongoose');
 
 //region user-related Schemas
 const UserSchema = new mongoose.Schema({
@@ -22,6 +22,8 @@ const UserSchema = new mongoose.Schema({
   email: {type: String, required: [true, 'Email is required'], unique: [true, 'Email already exists'], match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'Invalid email']},
   phoneNum: {type: String},
   payments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Payment'}],
+  isStudent: {type: Boolean , default: false},
+  isInstructor: {type: Boolean , default: false},
 });
 
 const PaymentSchema = new mongoose.Schema({
