@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 //pages import
 import Instructors from "../pages/Instructors";
 import Profile from "../pages/Profile";
-import Signin from "../pages/Signin";
+import SigninStudent from "../pages/SigninStudent";
 import DetailedInstructorProfile from "../pages/DetailedInstructorProfile";
 import { Button } from "@rneui/base";
 
@@ -22,7 +22,7 @@ const MyStack = () => {
         <Stack.Navigator initialRouteName="Home">
             <Stack.Screen name="Home" component={Instructors} />
             <Stack.Screen name="Profile" component={Profile} />
-            <Stack.Screen name="Signin" component={Signin} />
+            <Stack.Screen name="Signin" component={SigninStudent} />
             <Stack.Screen name="Instructor Details" component={DetailedInstructorProfile} />
         </Stack.Navigator>
     )

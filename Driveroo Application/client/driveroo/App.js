@@ -22,7 +22,7 @@ import { NavigationContainer } from '@react-navigation/native';
 /*
   CHANGE THIS TO YOUR IP ADDRESSS
 */
-const yourIP = '10.0.0.197'
+const yourIP = '10.0.0.173'
 axios.defaults.baseURL = `http://${yourIP}:3000`;
 
 
