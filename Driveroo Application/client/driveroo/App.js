@@ -30,8 +30,6 @@ export default function App() {
 export const Layout = () => {
   const { authState } = useAuth();
 
-  console.log(authState);
-
   return (
     <NavigationContainer>
       <Stack.Navigator>{authState?.authenticated ?
