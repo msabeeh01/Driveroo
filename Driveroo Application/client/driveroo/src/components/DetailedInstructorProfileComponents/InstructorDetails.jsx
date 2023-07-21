@@ -1,5 +1,6 @@
 import { View, Text } from "react-native"
 import { Input, Button } from "@rneui/base";
+import { useAuth } from "../../context/AuthContext";
 
 //!Duplicate for Student Details for Instructor Side
 
@@ -39,10 +40,19 @@ const MainContent = () => {
 }
 
 const Options = () => {
+
+    const {authState} = useAuth()
+    const {onLogout} = useAuth()
+    const showToken = () => {
+        console.log(authState.token)
+        console.log(authState.isStudent)
+    }
+
+
     return (
         <View style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: "#ffffff", height: "25%", width: "75%", gap: "10%" }}>
-            <Button title="Options">OPTIONS</Button>
-            <Button title="Options">OPTIONS</Button>
+            <Button title="Options" onPress={showToken}>OPTIONS</Button>
+            <Button title="Options" onPress={onLogout}>Logout</Button>
             <Button title="Options">OPTIONS</Button>
         </View>
     )

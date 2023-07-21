@@ -122,7 +122,7 @@ const login = async (req, res) => {
         const token = generateToken(user._id);
 
         //return token
-        res.status(200).json({token});
+        res.status(200).json({token, user});
     }catch(err){
         res.status(500).json({message: err.message});
     }

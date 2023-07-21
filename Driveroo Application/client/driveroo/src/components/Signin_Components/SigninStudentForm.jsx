@@ -7,6 +7,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import {theme} from '../../theme/theme';
 import { useNavigation } from "@react-navigation/native";
 
+//auth imports
+import {useAuth} from '../../context/AuthContext.js'
+
 const SigninStudentForm = () => {
 	return (
 		<Stack flex={1}>
@@ -18,22 +21,18 @@ const SigninStudentForm = () => {
 }
 
 const FormComponent = () => {
+	const {onLogin} = useAuth();
+
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-		const navigation = useNavigation();
+	const navigation = useNavigation();
 
     const handleSubmit = async () => {
-        try{
-            const response = await axios.post("/auth/login", 
-            {
-                email: email,
-                password: password,
-
-            })
-            console.log(response.data);
-        }catch(err){
-            console.log(err.response.data.message)
-        }
+		try{
+			await onLogin(email, password)
+		}catch(err){
+			console.log(err.message)
+		}
     }
 
     return (
@@ -55,7 +54,7 @@ const FormComponent = () => {
 							<FormControl.Label>Password</FormControl.Label>
 							<Input type="password" color={theme.colors.primaryTextDark} size="2xl" value={password} onChangeText={(text) => setPassword(text)} />
 						</FormControl>
-						<Button mt="2" colorScheme="indigo">
+						<Button mt="2" onPress={handleSubmit} colorScheme="indigo">
 							Sign in
 						</Button>
 						<HStack mt="6" justifyContent="center">

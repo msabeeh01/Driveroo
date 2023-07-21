@@ -23,7 +23,6 @@ const UserSchema = new mongoose.Schema({
   phoneNum: {type: String},
   payments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Payment'}],
   isStudent: {type: Boolean , default: false},
-  isInstructor: {type: Boolean , default: false},
 });
 
 const PaymentSchema = new mongoose.Schema({
