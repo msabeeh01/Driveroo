@@ -1,39 +1,45 @@
 //dependencies
 import 'react-native-gesture-handler';
 
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-
-//page imports
-import MyStack from './src/stack/navStack';
-
-//variable networking imports (allows expo to connect to localhost regardless of network)
-import * as Network from 'expo-network';
+import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import axios from 'axios';
 
-//navigation imports
-
-import { NavigationContainer } from '@react-navigation/native';
-
-// Network.getIpAddressAsync().then(ipAddress => {
-//   axios.defaults.baseURL = `http://${ipAddress}:3000`;
-//   console.log('my ip: ' + axios.defaults.baseURL);
-// })
+//page imports
+import { AuthProvider, useAuth } from './src/context/AuthContext';
+import SigninStudent from './src/pages/SigninStudent';
+import TabNavigator from './src/navigation/TabNavigator';
 
 /*
   CHANGE THIS TO YOUR IP ADDRESSS
 */
-const yourIP = '10.0.0.173'
+const yourIP = '192.168.2.13'
 axios.defaults.baseURL = `http://${yourIP}:3000`;
 
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <NavigationContainer>
-        <MyStack />
-      </NavigationContainer>
-    </SafeAreaView>
+    <AuthProvider>
+      <Layout />
+    </AuthProvider>
   );
+}
+
+export const Layout = () => {
+  const { authState } = useAuth();
+
+  console.log(authState);
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>{authState?.authenticated ?
+        <Stack.Screen name="Tab" component={TabNavigator} options={{ headerShown: false }} /> : 
+        <Stack.Screen name="Login" component={SigninStudent} options={{ headerShown: false }} />}
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
 
 const styles = StyleSheet.create({
