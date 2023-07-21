@@ -16,16 +16,16 @@ const Stack = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 const MyStack = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
-    return (
-        <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Home" component={Instructors} />
-            <Stack.Screen name="Profile" component={Profile} />
-            <Stack.Screen name="Signin" component={SigninStudent} />
-            <Stack.Screen name="Instructor Details" component={DetailedInstructorProfile} />
-        </Stack.Navigator>
-    )
+	return (
+		<Stack.Navigator>
+			<Stack.Screen name="Home" component={Instructors} />
+			<Stack.Screen name="Profile" component={Profile} />
+			<Stack.Screen name="Signin" component={SigninStudent} />
+			<Stack.Screen name="Instructor Details" component={DetailedInstructorProfile} />
+		</Stack.Navigator>
+	)
 }
 
 
