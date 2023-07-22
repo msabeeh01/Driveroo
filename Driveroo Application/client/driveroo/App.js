@@ -15,6 +15,7 @@ import TabNavigator from './src/navigation/TabNavigator';
 import theme from './src/theme/theme';
 import { color } from '@rneui/base';
 import AuthNavigator from './src/navigation/AuthNavigator';
+import InstructorNavigator from './src/navigation/InstructorNavigator';
 
 /*
   CHANGE THIS TO YOUR IP ADDRESSS
@@ -51,9 +52,12 @@ export const Layout = () => {
       )
     } else {
       return (
-        <SafeAreaView>
-          <Text>instructor</Text>
-          <Button onPress={onLogout}></Button>
+        <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.blueGray[900] }]}>
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen name="Instructor Tab" component={InstructorNavigator} options={{ headerShown: false }} />
+            </Stack.Navigator>
+          </NavigationContainer>
         </SafeAreaView>
       )
     }

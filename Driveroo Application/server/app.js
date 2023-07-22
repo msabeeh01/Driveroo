@@ -9,6 +9,7 @@ const mongoose = require('./db/db');
 
 //router setup
 const authRouter = require('./routes/authRoutes');
+const instructorRouter = require('./routes/instructorRoutes');
 
 var app = express();
 
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authRouter);
+app.use('/instructor', instructorRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -8,8 +8,11 @@ const { getAllInstructors, getAllStudents } = require('../controllers/instructor
 // auth/*
 router.post('/signupStudent', signupStudent);
 router.post('/signupInstructor', signupInstructor);
-router.get('/instructors', getAllInstructors); // get all instructors
+
+//move to studentRoutes.js
 router.get('/students', getAllStudents); // get all students
+
+
 // login routes
 router.post('/login', login);
 
