@@ -59,7 +59,7 @@ const signupStudent = async (req, res) => {
 }
 const signupInstructor = async (req, res) => {
     const { email, password, firstname, lastname, username } = req.body;
-    const isInstructor = true;
+    const isStudent = false;
     if (!email) {
         return res.status(400).send({ message: 'Email is required' });
     }
@@ -83,7 +83,7 @@ const signupInstructor = async (req, res) => {
             firstname,
             lastname,
             username,
-            isInstructor
+            isStudent
         });
         //generate token
         const token = generateToken(newUser._id);

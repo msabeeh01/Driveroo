@@ -22,7 +22,17 @@ const UserSchema = new mongoose.Schema({
   email: {type: String, required: [true, 'Email is required'], unique: [true, 'Email already exists'], match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'Invalid email']},
   phoneNum: {type: String},
   payments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Payment'}],
-  isStudent: {type: Boolean , default: false},
+  isStudent: {type: Boolean},
+  biography: {type: String},
+  hours: {type: String},
+});
+
+UserSchema.pre('save', function(next) {
+  if (!this.isStudent) {
+    this.biography = 'Enter your biography here';
+    this.hours = 'Enter your hours here';
+  }
+  next();
 });
 
 const PaymentSchema = new mongoose.Schema({

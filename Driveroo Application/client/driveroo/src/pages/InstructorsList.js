@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
-import ListOfInstructors from "../components/listOfInstructors";
+import ListOfInstructors from "../components/InstructorsListComponents/listOfInstructors";
 
 
 const Instructors = ({navigation}) => {
