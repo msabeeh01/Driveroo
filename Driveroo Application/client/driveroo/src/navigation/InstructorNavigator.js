@@ -6,11 +6,11 @@ import MyProfilePage from "../pages/InstructorPages/MyProfilePage";
 const Tab = createBottomTabNavigator();
 
 const InstructorNavigator = () => {
-    return(
-        <Tab.Navigator>
-            <Tab.Screen name="Home" component={MyProfilePage} />
-        </Tab.Navigator>
-    )
+	return(
+		<Tab.Navigator>
+			<Tab.Screen name="Home" component={MyProfilePage} />
+		</Tab.Navigator>
+	)
 }
 
 export default InstructorNavigator;
