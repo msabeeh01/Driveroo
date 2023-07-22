@@ -25,14 +25,14 @@ const FormComponent = () => {
 
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-	const navigation = useNavigation();
+	  const navigation = useNavigation();
 
     const handleSubmit = async () => {
-		try{
-			await onLogin(email, password)
-		}catch(err){
-			console.log(err.message)
-		}
+			try{
+				await onLogin(email, password)
+			}catch(err){
+				console.log(err.message)
+			}
     }
 
     return (
