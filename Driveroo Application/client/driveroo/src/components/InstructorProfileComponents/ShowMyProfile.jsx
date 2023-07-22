@@ -23,7 +23,7 @@ const ShowMyProfile = () => {
 
 const FormComponent = () => {
     const [instructor, setInstructor] = useState([])
-    const { authState } = useAuth()
+    const { authState, onLogout } = useAuth()
 
 
 
@@ -31,14 +31,11 @@ const FormComponent = () => {
         getMyDetails()
     }, [])
 
-    useEffect(() => {
-        console.log(instructor)
-        console.log(authState.token)
-    }, [instructor])
 
     const getMyDetails = async () => {
         try {
-            const response = await axios.get(`/instructor/${authState.token}`)
+
+            const response = await axios.get(`/instructor/getInstructor`)
             await setInstructor(response.data.instructor)
             console.log(instructor)
         } catch (error) {
@@ -51,6 +48,15 @@ const FormComponent = () => {
             ...prevState,
             [name]: value,
         }))
+    }
+
+    const handleSubmit = async () => {
+        try {
+            const response = await axios.put(`/instructor/${authState.token}`, instructor)
+            console.log(response.data)
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
 
@@ -90,8 +96,12 @@ const FormComponent = () => {
                         <Input type="text" color={theme.colors.primaryTextDark} size="2xl" value={instructor.biography} onChangeText={(value) => handleInputChange('biography', value)} />
                     </FormControl>
 
-                    <Button mt="2" colorScheme="indigo">
+                    <Button onPress={handleSubmit} mt="2" colorScheme="indigo">
                         Update Profile
+                    </Button>
+
+                    <Button onPress={onLogout} mt="2" colorScheme="red">
+                        Log Out
                     </Button>
                     <HStack mt="6" justifyContent="center">
                     </HStack>

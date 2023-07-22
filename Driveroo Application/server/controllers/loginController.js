@@ -1,6 +1,7 @@
 //environment variables
 require('dotenv').config();
 const JWTSECRET = process.env.JWTSECRET;
+const ALGORITHM = process.env.ALGORITHM
 
 // UserSchema
 const { User } = require('../models/ModelOne')
@@ -10,7 +11,7 @@ const jwt = require('jsonwebtoken');
 
 //generate token based on ID
 const generateToken = (_id) => {
-    return jwt.sign({ _id }, JWTSECRET, { expiresIn: '1d' });
+    return jwt.sign({ _id }, JWTSECRET, {algorithm: ALGORITHM, expiresIn: '1d' });
 }
 
 //encrypt password
