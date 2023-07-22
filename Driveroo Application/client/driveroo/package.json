@@ -38,5 +38,16 @@
     "eslint": "^8.45.0",
     "lint-staged": "^13.2.3"
   },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier src --write",
+      "eslint src --fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "private": true
 }
