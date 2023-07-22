@@ -2,10 +2,23 @@ const { Instructor, Student, User } = require('../models/ModelOne');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+const JWTSECRET = process.env.JWTSECRET
+
+const getIdFromToken = async (req) => {
+  const token = req.headers.authorization
+  if (token) {
+    const whatever = token.split(" ")[1]
+    const {_id} = await jwt.verify(whatever, JWTSECRET)
+    return _id
+  } else {
+    throw new Error('Token not found')
+  }
+
+}
+
 // Get Instructor by ID
 const getInstructorById = async (req, res) => {
-  const { token } = req.params;
-  const { _id } = await jwt.verify(token, process.env.JWTSECRET);
+  const _id = await getIdFromToken(req)
 
   try {
     const instructor = await User.findById(_id);
@@ -99,10 +112,23 @@ const updateInstructor = async (req, res) => {
   }
 }
 
+const getAllRequests = async (req, res) => {
+  const _id = await getIdFromToken(req)
+
+  try{
+    const instructor = await User.findById(_id)
+    res.send({requests: instructor.requests})
+  }catch(err){
+    res.status(400).send({message: err.message})
+  }
+
+}
+
 
 module.exports = {
   getInstructorById,
   getAllInstructors,
   getAllStudents,
-  updateInstructor
+  updateInstructor,
+  getAllRequests
 };

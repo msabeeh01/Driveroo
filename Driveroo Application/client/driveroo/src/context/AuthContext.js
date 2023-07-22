@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
         isStudent: result.data.user.isStudent
       })
 
-      axios.defaults.headers.common['Authorization'] =  `Basic ${result.data.data}`;
+      axios.defaults.headers.common['Authorization'] =  `Bearer ${result.data.token}`;
       await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
       await SecureStore.setItemAsync('isStudent', result.data.user.isStudent.toString());
 

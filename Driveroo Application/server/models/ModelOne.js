@@ -25,6 +25,7 @@ const UserSchema = new mongoose.Schema({
   isStudent: {type: Boolean},
   biography: {type: String},
   hours: {type: String},
+  requests: [{type: mongoose.Schema.Types.ObjectId, ref: 'Request'}]
 });
 
 UserSchema.pre('save', function(next) {
@@ -67,8 +68,8 @@ const SessionSchema = new mongoose.Schema({
 });
 
 const RequestSchema = new mongoose.Schema({
-  associatedStudent: {type: mongoose.Schema.Types.ObjectId,ref: 'Student'},
-  associatedInstructor: {type: mongoose.Schema.Types.ObjectId,ref: 'Instructor'},
+  associatedStudent: {type: mongoose.Schema.Types.ObjectId,ref: 'User'},
+  associatedInstructor: {type: mongoose.Schema.Types.ObjectId,ref: 'User'},
   requestDate: {type: Date, required: true},
   requestContent: {type: String, required: true},
   requestStatus: {type: String, required: true},
