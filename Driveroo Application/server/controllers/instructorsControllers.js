@@ -1,4 +1,4 @@
-const { Instructor, Student, User } = require('../models/ModelOne');
+const { Instructor, Student, User, Request } = require('../models/ModelOne');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -116,8 +116,8 @@ const getAllRequests = async (req, res) => {
   const _id = await getIdFromToken(req)
 
   try{
-    const instructor = await User.findById(_id)
-    res.send({requests: instructor.requests})
+    const request = await Request.find({associatedInstructor: _id}).populate('associatedStudent')
+    res.send({request})
   }catch(err){
     res.status(400).send({message: err.message})
   }

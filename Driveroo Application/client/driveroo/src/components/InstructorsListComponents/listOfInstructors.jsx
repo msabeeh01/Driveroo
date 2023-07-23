@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, View, FlatList, ScrollView } from "react-native";
+import { StyleSheet, Text, View, FlatList, ScrollView, TextInput } from "react-native";
 import { ListItem } from "@rneui/base";
 
 //hooks
@@ -13,6 +13,7 @@ import axios from "axios";
 
 const ListOfInstructors = () => {
     const [instructors, setInstructors] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
     const navigation = useNavigation();
 
     const getInstructors = async () => {
@@ -29,10 +30,20 @@ const ListOfInstructors = () => {
 
     useEffect(() => { console.log(instructors) }, [instructors]);
 
+    const filteredInstructors = instructors.filter((instructor) => {
+        return instructor.firstname.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+
     return (
         <ScrollView>
             <View style={styles.container}>
-                {instructors.map((instructor, index) => (
+                <TextInput
+                    style={styles.searchBar}
+                    placeholder="Search by instructor firstname"
+                    value={searchQuery}
+                    onChangeText={(text) => setSearchQuery(text)}
+                />
+                {filteredInstructors.map((instructor, index) => (
                     <ListItem key={instructor._id} style={styles.itemExpand} onPress={() => {navigation.navigate('Instructor Details', {instructor: instructor})}}>
                         <ListItem.Title>{index + 1}</ListItem.Title>
                         <ListItem.Subtitle>{instructor.firstname}</ListItem.Subtitle>
@@ -51,7 +62,15 @@ const styles = StyleSheet.create({
     },
     itemExpand: {
         alignSelf: 'stretch',
-    }
+    },
+    searchBar: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        margin: 10,
+        padding: 10,
+        width: "90%",
+    },
 })
 
 export default ListOfInstructors;
