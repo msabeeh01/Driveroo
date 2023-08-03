@@ -1,4 +1,4 @@
-import SigninStudentForm from "../components/Signin_Components/SigninStudentForm"
+import SigninStudentForm from "../components/Signin/SigninStudentForm"
 
 const SigninStudent = () => {
     return(

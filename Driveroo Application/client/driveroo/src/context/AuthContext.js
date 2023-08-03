@@ -11,7 +11,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [authState, setAuthState] = useState({ token: null, authenticated: null, isStudent: null });
+  const [authState, setAuthState] = useState({ token: null, authenticated: null, isStudent: null, user: null });
 
   useEffect(() => {
     const loadToken = async () => { 
@@ -31,9 +31,10 @@ export const AuthProvider = ({ children }) => {
     loadToken();
   }, [])
 
-  const register = async (email, password) => {
+  const register = async (email, password, firstname, lastname, isStudent) => {
+    const url = isStudent ? `${API_URL}/auth/signupStudent` : `${API_URL}/auth/signupInstructor`;
     try {
-      return await axios.post(`${API_URL}/users`, { email, password});
+      return await axios.post(url, { email, password, firstname, lastname });
     } catch (error) {
       return {error: true, message: error.data.message}
     }
@@ -46,7 +47,8 @@ export const AuthProvider = ({ children }) => {
       setAuthState({
         token: result.data.token,
         authenticated: true,
-        isStudent: result.data.user.isStudent
+        isStudent: result.data.user.isStudent,
+        user: result.data.user
       })
 
       axios.defaults.headers.common['Authorization'] =  `Bearer ${result.data.token}`;
@@ -72,7 +74,17 @@ export const AuthProvider = ({ children }) => {
     setAuthState({
       token: null,
       authenticated: null,
-      isStudent: null
+      isStudent: null,
+      user: null
+    })
+  }
+
+  const setUser = (user) => {
+    setAuthState({
+      token: user.token,
+      authenticated: true,
+      isStudent: true,
+      user
     })
   }
 
@@ -80,7 +92,8 @@ export const AuthProvider = ({ children }) => {
     onRegister: register,
     onLogin: login,
     onLogout: logout,
-    authState
+    authState,
+    setUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
