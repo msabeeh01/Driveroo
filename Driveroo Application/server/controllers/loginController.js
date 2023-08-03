@@ -21,7 +21,7 @@ const encryptPassword = async (password) => {
 
 //signup functions
 const signupStudent = async (req, res) => {
-    const { email, password, firstname, lastname, username } = req.body;
+    const { email, password, firstname, lastname } = req.body;
     const isStudent = true;
     if (!email) {
         return res.status(400).send({ message: 'Email is required' });
@@ -35,9 +35,6 @@ const signupStudent = async (req, res) => {
     if (!lastname) {
         return res.status(400).send({ message: 'Last name is required' });
     }
-    if (!username) {
-        return res.status(400).send({ message: 'Username is required' });
-    }
     try {
         const encryptedPassword = await encryptPassword(password);
         const newUser = new User({
@@ -45,7 +42,7 @@ const signupStudent = async (req, res) => {
             password: encryptedPassword,
             firstname,
             lastname,
-            username,
+            username: email,
             isStudent
         });
         //generate token
@@ -53,13 +50,13 @@ const signupStudent = async (req, res) => {
         //save user
         await newUser.save();
         //send token
-        res.status(201).json({ token });
+        res.status(201).json({ token, user: newUser });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 }
 const signupInstructor = async (req, res) => {
-    const { email, password, firstname, lastname, username } = req.body;
+    const { email, password, firstname, lastname } = req.body;
     const isStudent = false;
     if (!email) {
         return res.status(400).send({ message: 'Email is required' });
@@ -73,9 +70,6 @@ const signupInstructor = async (req, res) => {
     if (!lastname) {
         return res.status(400).send({ message: 'Last name is required' });
     }
-    if (!username) {
-        return res.status(400).send({ message: 'Username is required' });
-    }
     try {
         const encryptedPassword = await encryptPassword(password);
         const newUser = new User({
@@ -83,7 +77,7 @@ const signupInstructor = async (req, res) => {
             password: encryptedPassword,
             firstname,
             lastname,
-            username,
+            username: email,
             isStudent
         });
         //generate token
@@ -91,7 +85,7 @@ const signupInstructor = async (req, res) => {
         //save user
         await newUser.save();
         //send token
-        res.status(201).json({ token });
+        res.status(201).json({ token, user: newUser });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
