@@ -11,6 +11,7 @@ const mongoose = require('./db/db');
 const authRouter = require('./routes/authRoutes');
 const instructorRouter = require('./routes/instructorRoutes');
 const studentRouter = require('./routes/studentRoutes');
+const authenticateToken = require('./middleware/getUserFromToken');
 
 var app = express();
 
@@ -25,8 +26,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authRouter);
-app.use('/instructor', instructorRouter)
-app.use('/student', studentRouter)
+app.use('/instructor', authenticateToken, instructorRouter);
+app.use('/student', authenticateToken, studentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

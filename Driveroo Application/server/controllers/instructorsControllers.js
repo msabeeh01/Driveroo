@@ -18,7 +18,7 @@ const getIdFromToken = async (req) => {
 
 // Get Instructor by ID
 const getInstructorById = async (req, res) => {
-  const _id = await getIdFromToken(req)
+  const _id = req.user?._id
 
   try {
     const instructor = await User.findById(_id);
@@ -27,7 +27,7 @@ const getInstructorById = async (req, res) => {
       return res.status(404).send({ message: 'Instructor not found' });
     }
 
-    res.send({ instructor });
+    res.send({ user: instructor });
   } catch (err) {
     res.status(500).send({ message: err.message });
   }
@@ -80,20 +80,19 @@ const getAllStudents = async (req, res) => {
 };
 
 const updateInstructor = async (req, res) => {
-  const { token } = req.params;
-  const { _id } = await jwt.verify(token, process.env.JWTSECRET);
-  const { username, firstname, lastname, email, biography } = req.body;
+  const { id } = req.params;
+  const { firstname, lastname, email, biography, firebaseUID } = req.body;
 
   try {
     const updatedInstructor = await User.findByIdAndUpdate(
-      _id,
+      id,
       {
         $set: {
-          username: username || undefined,
           firstname: firstname || undefined,
           lastname: lastname || undefined,
           email: email || undefined,
           biography: biography || undefined,
+          firebaseUID: firebaseUID || undefined,
         },
       },
       {

@@ -17,9 +17,57 @@ const getIdFromToken = async (req) => {
 
 }
 
+const getStudentById = async (req, res) => {
+  const _id = req.user?._id
+
+  try {
+    const student = await User.findById(_id);
+
+    if (!student) {
+      return res.status(404).send({ message: 'Student not found' });
+    }
+
+    res.send({ user: student });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+const updateStudent = async (req, res) => {
+  const { id } = req.params;
+  const { firstname, lastname, email, firebaseUID } = req.body;
+
+  try {
+    const student = await User.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          firstname: firstname || undefined,
+          lastname: lastname || undefined,
+          email: email || undefined,
+          firebaseUID: firebaseUID || undefined,
+        },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!student) {
+      return res.status(404).send({ message: 'Student not found' });
+    }
+
+    res.send({ student });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
+}
+
 
 const makeNewRequest = async (req, res) => {
-    const _id = await getIdFromToken(req)
+    const _id = req.user?._id;
     var {associatedInstructor, requestDate, requestContent, requestStatus} = req.body
 
     requestStatus = "Pending"
@@ -60,5 +108,7 @@ const makeNewRequest = async (req, res) => {
 }
 
 module.exports = {
-    makeNewRequest
+    makeNewRequest,
+    updateStudent,
+    getStudentById
 }
