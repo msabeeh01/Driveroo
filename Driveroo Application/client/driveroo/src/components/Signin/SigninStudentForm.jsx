@@ -19,7 +19,7 @@ const SigninStudentForm = () => {
 }
 
 const FormComponent = () => {
-	const { onLogin, setUser } = useAuth();
+	const { onLogin, setUser, updateFirebaseUID } = useAuth();
 
 	const [password, setPassword] = useState('');
 	const [email, setEmail] = useState('');
@@ -27,9 +27,14 @@ const FormComponent = () => {
 
 	const handleSubmit = async () => {
 		try{
-			const user = await signInWithEmailAndPassword(firebaseAuth, email, password)
-			setUser(user);
-			//await onLogin(email, password)
+			const result = await onLogin(email, password);
+			signInWithEmailAndPassword(firebaseAuth, email, password).then((data) => {
+				const { user: { uid } } = data;
+				if(uid) {
+					updateFirebaseUID(result.data.user, uid)
+				}
+			})
+			
 		}catch(err){
 			console.log(err.message)
 		}
@@ -48,7 +53,7 @@ const FormComponent = () => {
 				<VStack space={3} mt="5">
 					<FormControl>
 						<FormControl.Label>Email</FormControl.Label>
-						<Input type="email" color={theme.colors.primaryTextDark} size="2xl" value={email} onChangeText={(text) => setEmail(text)} />
+						<Input type="email" color={theme.colors.primaryTextDark} size="2xl" value={email} onChangeText={(text) => setEmail(text.toLowerCase())} />
 					</FormControl>
 					<FormControl>
 						<FormControl.Label>Password</FormControl.Label>
