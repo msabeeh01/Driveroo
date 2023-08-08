@@ -49,6 +49,7 @@ const getAllInstructors = async (req, res) => {
       email: instructor.email,
       biography: instructor.biography,
       hours: instructor.hours,
+      firebaseUID: instructor.firebaseUID,
     }));
 
     res.status(200).json({ instructors: allInstructors });
@@ -71,6 +72,7 @@ const getAllStudents = async (req, res) => {
       firstname: student.firstname,
       lastname: student.lastname,
       email: student.email,
+      firebaseUID: student.firebaseUID,
     }));
 
     res.status(200).json({ students: allStudents });
