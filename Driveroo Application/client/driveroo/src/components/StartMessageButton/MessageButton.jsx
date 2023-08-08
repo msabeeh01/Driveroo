@@ -4,16 +4,16 @@ import {
   getDatabase,
   get,
   ref,
-  set,
-  onValue,
   push,
   update,
 } from 'firebase/database';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
 const MessageButton = ({firebaseUID}) => {
   const {authState} = useAuth();
   const [myData, setMyData] = React.useState(null);
+  const navigation = useNavigation();
 
   React.useLayoutEffect(() => {
     const getMyData = async () => {
@@ -55,7 +55,7 @@ const MessageButton = ({firebaseUID}) => {
 
       const newChatroomId = newChatroomRef.key;
 
-      const userChats = user.friends || [];
+      const userChats = user.chats || [];
       //join myself to this user chat list
       update(ref(database, `users/${user.username}`), {
         chats: [
@@ -64,11 +64,12 @@ const MessageButton = ({firebaseUID}) => {
             username: myData.username,
             avatar: myData.avatar,
             chatroomId: newChatroomId,
+            fullName: myData?.fullName,
           },
         ],
       });
 
-      const myChats = myData.friends || [];
+      const myChats = myData.chats || [];
       //add this user to my chat list
       update(ref(database, `users/${myData.username}`), {
         chats: [
@@ -77,12 +78,15 @@ const MessageButton = ({firebaseUID}) => {
             username: user.username,
             avatar: user.avatar,
             chatroomId: newChatroomId,
+            fullName: user?.fullName,
           },
         ],
       });
 
+      navigation.navigate('Chat', { myData, selectedUser: {...user, chatroomId: newChatroomId }});
+
     } catch (error) {
-      
+      console.log(error);
     }
   }
 

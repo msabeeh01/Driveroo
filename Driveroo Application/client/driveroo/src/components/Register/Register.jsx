@@ -38,6 +38,7 @@ const FormComponent = () => {
 				const newUserObj = {
 					username: user.uid,
 					avatar: 'https://i.pravatar.cc/150?u=' + Date.now(),
+					fullName: `${firstname} ${lastname}`
 				};
 				
 				set(ref(database, `users/${user.uid}`), newUserObj);

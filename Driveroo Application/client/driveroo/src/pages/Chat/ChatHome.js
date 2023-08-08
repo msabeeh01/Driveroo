@@ -1,12 +1,14 @@
 import React from 'react'
 import { useAuth } from '../../context/AuthContext';
 import { getDatabase, get, ref, set } from 'firebase/database';
-import { Box, FlatList, Heading, Avatar, HStack, VStack, Text, Spacer, Center, NativeBaseProvider } from "native-base";
+import { Box, FlatList, Heading, Avatar, HStack, VStack, Text, Spacer, Center, NativeBaseProvider, Pressable } from "native-base";
+import { useNavigation } from '@react-navigation/native';
 
 const ChatHome = () => {
   const { authState } = useAuth();
   const [myData, setMyData] = React.useState(null);
   const [chats, setChats] = React.useState([]);
+  const navigation = useNavigation();
   const userID = authState?.user?.firebaseUID;
 
   React.useLayoutEffect(() => {
@@ -19,9 +21,6 @@ const ChatHome = () => {
           setMyData(user);
           setChats(user.chats || []);
         }
-
-        console.log(user);
-        console.log(chats)
 
         // set friends list change listener
         const myUserRef = ref(database, `users/${userID}`);
@@ -41,7 +40,7 @@ const ChatHome = () => {
     
     getUser()
 
-  }, [userID]);
+  }, [userID, chats]);
 
   const findUser = async name => {
     const database = getDatabase();
@@ -51,40 +50,30 @@ const ChatHome = () => {
     return mySnapshot.val();
   };
 
+  const goToChat = (user) => {
+    navigation.navigate('Chat', {myData, selectedUser: user});
+  }
+
   return (
     <Box>
       <Heading fontSize="xl" p="4" pb="3">
         Inbox
       </Heading>
-      <FlatList data={chats} renderItem={({
-      item
-    }) => <Box borderBottomWidth="1" _dark={{
-      borderColor: "muted.50"
-    }} borderColor="muted.800" pl={["0", "4"]} pr={["0", "5"]} py="2">
+      <FlatList paddingLeft="4" paddingRight="4" data={chats} renderItem={({ item }) =>
+        <Pressable onPress={() => goToChat(item)}>
+          <Box borderBottomWidth="1" borderColor="muted.800" pl={["0", "4"]} pr={["0", "5"]} py="2">
             <HStack space={[2, 3]} justifyContent="space-between">
-              <Avatar size="48px" source={{
-          uri: item.avatar
-        }} />
+              <Avatar size="48px" source={{ uri: item.avatar }} />
               <VStack>
-                <Text _dark={{
-            color: "warmGray.50"
-          }} color="coolGray.800" bold>
+                <Text color="coolGray.800" bold>
                   {item.fullName}
-                </Text>
-                <Text color="coolGray.600" _dark={{
-            color: "warmGray.200"
-          }}>
-                  {item.recentText}
                 </Text>
               </VStack>
               <Spacer />
-              <Text fontSize="xs" _dark={{
-          color: "warmGray.50"
-        }} color="coolGray.800" alignSelf="flex-start">
-                {item.timeStamp}
-              </Text>
             </HStack>
-          </Box>} keyExtractor={item => item.chatroomId} />
+          </Box>
+        </Pressable>
+      } keyExtractor={item => item.chatroomId} />
     </Box>
   )
 }

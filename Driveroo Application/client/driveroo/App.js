@@ -10,12 +10,9 @@ import axios from 'axios';
 
 //page imports
 import { AuthProvider, useAuth } from './src/context/AuthContext';
-import SigninStudent from './src/pages/SigninStudent';
-import TabNavigator from './src/navigation/TabNavigator';
 import theme from './src/theme/theme';
-import { color } from '@rneui/base';
 import AuthNavigator from './src/navigation/AuthNavigator';
-import InstructorNavigator from './src/navigation/InstructorNavigator';
+import RootNavigator from './src/navigation/RootNavigator';
 
 /*
   CHANGE THIS TO YOUR IP ADDRESSS
@@ -40,23 +37,13 @@ export const Layout = () => {
   const theme = useTheme();
 
   if (authState?.authenticated) {
-    if (authState?.isStudent) {
-      return (
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="Tab" component={TabNavigator} options={{ headerShown: false }} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      )
-    } else {
-      return (
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="Instructor Tab" component={InstructorNavigator} options={{ headerShown: false }} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      )
-    }
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Root" component={RootNavigator} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
   } else {
     return (
       <NavigationContainer>

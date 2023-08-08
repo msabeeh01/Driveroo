@@ -76,7 +76,7 @@ const Options = ({instructor}) => {
             {
                 error ? <Text>{error}</Text> : <Button title="Make Request" onPress={sendRequest}>Make Request</Button>
             }
-            <MessageButton firebaseUID={instructor.firebaseUID} />
+            {instructor.firebaseUID && <MessageButton firebaseUID={instructor.firebaseUID} />}
             
         </View>
     )
