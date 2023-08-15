@@ -1,3 +1,4 @@
+import React, {useState} from 'react';
 import { View } from "native-base"
 import { StyleSheet, TextInput } from "react-native"
 import { VStack, Link, Stack, Box, Center, Input, Heading, Button, FormControl, HStack, Text } from "native-base";
@@ -8,7 +9,6 @@ import axios from "axios"
 
 //auth imports
 import { useAuth } from "../../context/AuthContext"
-import { useEffect, useState } from "react"
 
 const ShowMyProfile = () => {
     return (
@@ -22,29 +22,26 @@ const ShowMyProfile = () => {
 }
 
 const FormComponent = () => {
-    const [instructor, setInstructor] = useState([])
+    const [user, setUser] = useState({})
     const { authState, onLogout } = useAuth()
+    const baseUrl = authState.isStudent ? 'student' : 'instructor';
 
-
-
-    useEffect(() => {
+    React.useEffect(() => {
         getMyDetails()
     }, [])
 
 
     const getMyDetails = async () => {
         try {
-
-            const response = await axios.get(`/instructor/getInstructor`)
-            await setInstructor(response.data.instructor)
-            console.log(instructor)
+            const response = await axios.get(`/${baseUrl}/profile`)
+            await setUser(response.data.user)
         } catch (error) {
             console.log(error.message)
         }
     }
 
     const handleInputChange = (name, value) => {
-        setInstructor((prevState) => ({
+        setUser((prevState) => ({
             ...prevState,
             [name]: value,
         }))
@@ -52,7 +49,7 @@ const FormComponent = () => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.put(`/instructor/${authState.token}`, instructor)
+            const response = await axios.put(`/${baseUrl}/${user._id}`, user)
             console.log(response.data)
         } catch (error) {
             console.log(error.message)
@@ -71,30 +68,26 @@ const FormComponent = () => {
                 </Heading>
 
                 <VStack space={3} mt="5">
-                    <FormControl>
-                        <FormControl.Label>Email</FormControl.Label>
-                        <Input type="text" color={theme.colors.primaryTextDark} size="2xl" value={authState.token} />
-                    </FormControl>
 
                     <FormControl>
                         <FormControl.Label>Email</FormControl.Label>
-                        <Input type="email" color={theme.colors.primaryTextDark} size="2xl" value={instructor.email} onChangeText={(value) => handleInputChange('email', value)} />
+                        <Input type="email" color={theme.colors.primaryTextDark} size="2xl" value={user.email} onChangeText={(value) => handleInputChange('email', value)} />
                     </FormControl>
 
                     <FormControl>
                         <FormControl.Label>First Name</FormControl.Label>
-                        <Input type="text" color={theme.colors.primaryTextDark} size="2xl" value={instructor.firstname} onChangeText={(value) => handleInputChange('firstname', value)} />
+                        <Input type="text" color={theme.colors.primaryTextDark} size="2xl" value={user.firstname} onChangeText={(value) => handleInputChange('firstname', value)} />
                     </FormControl>
 
                     <FormControl>
                         <FormControl.Label>Last Name</FormControl.Label>
-                        <Input type="text" color={theme.colors.primaryTextDark} size="2xl" value={instructor.lastname} onChangeText={(value) => handleInputChange('lastname', value)} />
+                        <Input type="text" color={theme.colors.primaryTextDark} size="2xl" value={user.lastname} onChangeText={(value) => handleInputChange('lastname', value)} />
                     </FormControl>
 
-                    <FormControl>
+                    {!authState.isStudent && <FormControl>
                         <FormControl.Label>Biography</FormControl.Label>
-                        <Input type="text" color={theme.colors.primaryTextDark} size="2xl" value={instructor.biography} onChangeText={(value) => handleInputChange('biography', value)} />
-                    </FormControl>
+                        <Input type="text" color={theme.colors.primaryTextDark} size="2xl" value={user.biography} onChangeText={(value) => handleInputChange('biography', value)} />
+                    </FormControl>}
 
                     <Button onPress={handleSubmit} mt="2" colorScheme="indigo">
                         Update Profile

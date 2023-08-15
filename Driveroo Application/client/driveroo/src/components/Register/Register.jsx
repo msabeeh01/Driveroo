@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { VStack, Radio, Stack, Box, Center, Input, Heading, Button, FormControl, HStack, Text, ScrollView, useToast } from "native-base";
+import { VStack, Radio, Stack, Box, Center, Input, Heading, Button, FormControl, HStack, Text, ScrollView, useToast, Toast } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { getDatabase, ref, set } from 'firebase/database';
 
 import {theme} from '../../theme/theme';
 
@@ -20,7 +21,6 @@ const RegisterForm = () => {
 
 const FormComponent = () => {
 	const { onRegister } = useAuth();
-  const toast = useToast();
 
 	const [password, setPassword] = useState('');
 	const [email, setEmail] = useState('');
@@ -31,12 +31,26 @@ const FormComponent = () => {
 
 	const handleSubmit = async () => {
 		try{
-			await onRegister(email, password, firstname, lastname, isStudent)
-      await createUserWithEmailAndPassword(firebaseAuth, email, password)
-      navigation.goBack();
-      toast.show({text: "Account created successfully!"})
+			const database = getDatabase();
+			const result = await onRegister(email, password, firstname, lastname, Boolean(isStudent));
+      createUserWithEmailAndPassword(firebaseAuth, email, password).then((userCredential) => {
+				const user = userCredential.user;
+				const newUserObj = {
+					username: user.uid,
+					avatar: 'https://i.pravatar.cc/150?u=' + Date.now(),
+					fullName: `${firstname} ${lastname}`
+				};
+				
+				set(ref(database, `users/${user.uid}`), newUserObj);
+
+				if(result.data.user) {
+					navigation.goBack();
+      		Toast.show({_text: 'Account created successfully!'})
+				}
+ 			})
+      
 		}catch(err){
-			console.log(err.message)
+			console.log(err)
 		}
 	}
 
@@ -51,7 +65,7 @@ const FormComponent = () => {
 				</Heading>
 
 				<VStack space={3} mt="5">
-          <Radio.Group name="isStudent" defaultValue="0" onChange={value => setIsStudent(value)}>
+          <Radio.Group name="isStudent" defaultValue="0" onChange={value => setIsStudent(!isStudent)}>
             <Stack direction={{ base: "row", md: "row" }} alignItems={{ base: "flex-center" }} space={4} w="100%">
               <Radio value="0" colorScheme="indigo" size="md">
                 <Text color={theme.colors.white}>I'm a Student</Text>

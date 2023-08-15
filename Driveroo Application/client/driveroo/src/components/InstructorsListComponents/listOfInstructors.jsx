@@ -28,7 +28,7 @@ const ListOfInstructors = () => {
 
     useEffect(() => { getInstructors() }, []);
 
-    useEffect(() => { console.log(instructors) }, [instructors]);
+    //useEffect(() => { console.log(instructors) }, [instructors]);
 
     const filteredInstructors = instructors.filter((instructor) => {
         return instructor.firstname.toLowerCase().includes(searchQuery.toLowerCase());

@@ -1,6 +1,6 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import TabNavigator from './TabNavigator';
+import TabNavigator from './StudentTabNavigator';
 import SigninStudent from '../pages/SigninStudent';
 import Register from '../pages/RegisterPage';
 

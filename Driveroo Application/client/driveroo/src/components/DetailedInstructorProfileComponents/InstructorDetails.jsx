@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 
 import axios from "axios";
+import MessageButton from "../StartMessageButton/MessageButton";
 
 //!Duplicate for Student Details for Instructor Side
 
@@ -69,12 +70,13 @@ const Options = ({instructor}) => {
 
 
     return (
-        <View style={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: "#ffffff", height: "25%", width: "75%", gap: "10%" }}>
+        <View style={{ display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "#ffffff", height: "25%", width: "75%", gap: "10%" }}>
             <Button title="Options" onPress={showToken}>OPTIONS</Button>
             <Button title="Options" onPress={onLogout}>Logout</Button>
             {
                 error ? <Text>{error}</Text> : <Button title="Make Request" onPress={sendRequest}>Make Request</Button>
             }
+            {instructor.firebaseUID && <MessageButton firebaseUID={instructor.firebaseUID} />}
             
         </View>
     )

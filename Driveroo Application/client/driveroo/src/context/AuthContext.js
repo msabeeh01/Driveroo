@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const AuthContext = createContext({});
 const TOKEN_KEY = 'token';
-const API_URL = 'http://10.0.0.173:3000';
+const API_URL = 'http://172.20.10.14:3000';
 
 export const useAuth = () => {
   return useContext(AuthContext);
@@ -18,12 +18,15 @@ export const AuthProvider = ({ children }) => {
       const token = await SecureStore.getItemAsync(TOKEN_KEY);
       const isStudent = await SecureStore.getItemAsync('isStudent');
 
+      const user = await getProfile(isStudent);
+
       if (token) {
         axios.defaults.headers.common['Authorization'] =  `Basic ${token}`;
         setAuthState({
           token,
           authenticated: true,
-          isStudent
+          isStudent,
+          user
         })
       }
     };
@@ -34,9 +37,11 @@ export const AuthProvider = ({ children }) => {
   const register = async (email, password, firstname, lastname, isStudent) => {
     const url = isStudent ? `${API_URL}/auth/signupStudent` : `${API_URL}/auth/signupInstructor`;
     try {
-      return await axios.post(url, { email, password, firstname, lastname });
+      const response = await axios.post(url, { email, password, firstname, lastname });
+      return response; 
     } catch (error) {
-      return {error: true, message: error.data.message}
+      console.log(error)
+      return {error: true, message: error}
     }
   }
 
@@ -79,6 +84,31 @@ export const AuthProvider = ({ children }) => {
     })
   }
 
+  const getProfile = async (isStudent) => {
+    const baseUrl = isStudent ? 'student' : 'instructor';
+
+    try {
+      const response = await axios.get(`/${baseUrl}/profile`)
+      return response.data.user;
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  const updateFirebaseUID = async (user, firebaseUID) => {
+
+    const url = user.isStudent ? `${API_URL}/student/${user._id}` : `${API_URL}/instructor/${user._id}`;
+
+    try {
+      const response = await axios.put(url, { firebaseUID });
+      return response; 
+    } catch (error) {
+      console.log(error)
+      return {error: true, message: error}
+    }
+    
+  }
+
   const setUser = (user) => {
     setAuthState({
       token: user.token,
@@ -93,7 +123,8 @@ export const AuthProvider = ({ children }) => {
     onLogin: login,
     onLogout: logout,
     authState,
-    setUser
+    setUser,
+    updateFirebaseUID
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
